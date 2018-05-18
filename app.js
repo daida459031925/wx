@@ -1,13 +1,19 @@
 //app.js
 App({
   data:{
-    "AppID": "wx04e35afa5a4c5c17",
-    "AppSecret": "1a66d5df7b2d81da897e04e87deff19b"
+    "http":"http://",
+    "address":"127.0.0.1",
+    "colon":":",
+    "port":"8088",
+    "fandAppid":"/we/reception/fandAppid.do",
+    "session": "/we/reception/session.do"
   },
   onLaunch: function () {
+      //url: this.data.http + this.data.address + this.data.colon + this.data.port + this.data.fandAppid,
     // 展示本地存储能力
     //启动小程序后出发的方法
-    var logs = wx.getStorageSync('logs') || []
+    //操作日志不应该在前段服务，需要理由后台服务器进行产生。这个log的逻辑目前只是记录了当前登陆时间
+    var logs = wx.getStorageSync('logs') || []//获取指定的key的内容然后使用||[]  相当于是list增加一个数据位置
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
@@ -22,19 +28,16 @@ App({
           //这个网络请求时发到自己的服务器中的（第三方服务器），然后由第三方服务器来获取openid
           //模拟第三方服务器已经获取到code然后进行访问来获取openid
           wx.request({
-            url: 'https://api.weixin.qq.com/sns/jscode2session',
+            url: this.data.http + this.data.address + this.data.colon + this.data.port + this.data.session,
             data: {
-              appid: getApp().data.AppID,
-              secret: getApp().data.AppSecret,
-              js_code: res.code,
-              grant_type:"authorization_code"
+              js_code: res.code
             },
             header: {
               'content-type': 'application/json' // 默认值
             },
             success:function (datas){
               console.log(datas);
-              console.log(datas.data.openid+"获取到的openid，这个openid应该是第三方服务器生产出来的，但是目前研究的是微信端，所以直接写在了微信小程序里  ");
+             // console.log(datas.data.openid+"获取到的openid，这个openid应该是第三方服务器生产出来的，但是目前研究的是微信端，所以直接写在了微信小程序里  ");
             },
             fail:function(){
               console.log("异常");
@@ -77,6 +80,20 @@ App({
         wx.login() //重新登录    ....
       }
     })
+  },
+  onShow: function (options) {
+    //这个地方显示内容就是。例如离开当前页面到指定内容上时options  会出现一个值例如出现1011.这个就会调用摄像头去扫描二维码
+
+    // Do something when show.
+    console.log("显示" + options);
+    console.log(options);
+  },
+  onHide: function () {
+    // Do something when hide.
+    console.log("关闭");
+  },
+  onError: function (msg) {
+    console.log(msg)
   },
   globalData: {
     userInfo: null
