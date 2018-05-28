@@ -19,3 +19,18 @@
 .usermotto {
   margin-top: 200px;
 }
+
+.section-input{
+  height:8%;
+  background:#F4F4F4; 
+  padding: 16rpx;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.section-input-width{
+  width: 25%;
+}

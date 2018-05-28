@@ -8,7 +8,9 @@ App({
     "fandAppid":"/we/reception/fandAppid.do",
     "session": "/we/reception/session.do"
   },
-  onLaunch: function () {
+  onLaunch: function (ress) {
+    console.log("************")
+    console.log(ress)
       //url: this.data.http + this.data.address + this.data.colon + this.data.port + this.data.fandAppid,
     // 展示本地存储能力
     //启动小程序后出发的方法
@@ -16,7 +18,6 @@ App({
     var logs = wx.getStorageSync('logs') || []//获取指定的key的内容然后使用||[]  相当于是list增加一个数据位置
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
     // 登录
     wx.login({
       success: res => {
@@ -36,8 +37,16 @@ App({
               'content-type': 'application/json' // 默认值
             },
             success:function (datas){
-              console.log(datas);
+              console.log(datas.data);//微信规定的所有数据加载一个data
              // console.log(datas.data.openid+"获取到的openid，这个openid应该是第三方服务器生产出来的，但是目前研究的是微信端，所以直接写在了微信小程序里  ");
+              var sudata = datas.data;
+              if (sudata.code == 200){
+                console.log(sudata.data);
+                wx.setStorage({
+                  key: '3rd_session',
+                  data: sudata.data
+                });//将服务器的session放入缓存中
+              }
             },
             fail:function(){
               console.log("异常");
@@ -68,18 +77,6 @@ App({
         }
       }
     })
-
-    wx.checkSession({
-      success: function () {
-        //session 未过期，并且在本生命周期一直有效
-        console.log("************************111111");
-      },
-      fail: function () {
-        console.log("************************1");
-        //登录态过期
-        wx.login() //重新登录    ....
-      }
-    })
   },
   onShow: function (options) {
     //这个地方显示内容就是。例如离开当前页面到指定内容上时options  会出现一个值例如出现1011.这个就会调用摄像头去扫描二维码
@@ -97,5 +94,25 @@ App({
   },
   globalData: {
     userInfo: null
+  },
+  // checkSession:function(){
+  //   wx.checkSession({
+  //     success: function () {
+  //       //session 未过期，并且在本生命周期一直有效
+  //       console.log("************************111111");
+  //       console.log(this);
+  //     },
+  //     fail: function () {
+  //       console.log("************************1");
+  //       //登录态过期
+  //       wx.login() //重新登录    ....
+  //     }
+  //     //战时不知道如何使用哦
+  //   })
+  // },
+  onPageNotFound(res) {
+    wx.redirectTo({
+
+    })//不存在页面的路径
   }
 })
