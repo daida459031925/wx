@@ -1,12 +1,11 @@
 <!--index.wxml-->
 <view class="container">
   <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+   <open-data class="userinfo-avatar" type="userAvatarUrl" background-size="cover" ></open-data>
+      <!-- <open-data type="userGender" lang="zh_CN" class="userinfo-nickname"></open-data> -->
+      <open-data type="userNickName" class="userinfo-nickname"></open-data>
   </view>
+    <view class="vies-qiandao" bindtap="bindViewQianDao">签到</view>
   <view class="section-input">
     <view class="section-input-width">首页</view>
     <view class="section-input-width">附近</view>

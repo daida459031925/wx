@@ -3,16 +3,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position:fixed; 
+  left: 0px; 
+  top: 0px; 
 }
 
 .userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
+  width: 40rpx;
+  height: 40rpx;
   margin: 20rpx;
   border-radius: 50%;
 }
 
 .userinfo-nickname {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position:fixed; 
+  left: 40px; 
+  top: 5px; 
   color: #aaa;
 }
 
@@ -33,4 +42,14 @@
 
 .section-input-width{
   width: 25%;
+}
+
+.vies-qiandao{
+  position:absolute;
+  right:5px;
+  top:8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #aaa;
 }

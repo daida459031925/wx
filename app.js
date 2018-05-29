@@ -18,12 +18,49 @@ App({
     var logs = wx.getStorageSync('logs') || []//获取指定的key的内容然后使用||[]  相当于是list增加一个数据位置
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+
+    // 获取用户信息   //这个接口以后升级后不能使用
+    // wx.getSetting({
+    //   success: res => {
+    //     if (res.authSetting['scope.userInfo']) {
+    //       // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+    //       wx.getUserInfo({
+    //         success: res => {
+    //           // 可以将 res 发送给后台解码出 unionId
+    //           this.globalData.userInfo = res.userInfo
+
+    //           // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+    //           // 所以此处加入 callback 以防止这种情况
+    //           if (this.userInfoReadyCallback) {
+    //             this.userInfoReadyCallback(res)
+    //           }
+    //         }
+    //       })
+    //     }
+    //   }
+    // })
+
+    // 可以通过 wx.getSetting 先查询一下用户是否授权了 "scope.record" 这个 scope
+    wx.getSetting({
+      success(res) {
+        if (!res.authSetting['scope.userLocation']) {
+          wx.authorize({
+            scope: 'scope.userLocation',
+            success() {
+              // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+              
+            }
+          })
+        }
+      }
+    })
+
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         //进入小程序后就会启动这个。目测是从本机得到的code
-        console.log(res.code+"*********************登陆这个小程序的时候就会生产一个code");
+        console.log(res.code + "*********************登陆这个小程序的时候就会生产一个code");
         if (res.code) {
           //发起网络请求
           //这个网络请求时发到自己的服务器中的（第三方服务器），然后由第三方服务器来获取openid
@@ -36,11 +73,11 @@ App({
             header: {
               'content-type': 'application/json' // 默认值
             },
-            success:function (datas){
+            success: function (datas) {
               console.log(datas.data);//微信规定的所有数据加载一个data
-             // console.log(datas.data.openid+"获取到的openid，这个openid应该是第三方服务器生产出来的，但是目前研究的是微信端，所以直接写在了微信小程序里  ");
+              // console.log(datas.data.openid+"获取到的openid，这个openid应该是第三方服务器生产出来的，但是目前研究的是微信端，所以直接写在了微信小程序里  ");
               var sudata = datas.data;
-              if (sudata.code == 200){
+              if (sudata.code == 200) {
                 console.log(sudata.data);
                 wx.setStorage({
                   key: '3rd_session',
@@ -48,7 +85,7 @@ App({
                 });//将服务器的session放入缓存中
               }
             },
-            fail:function(){
+            fail: function () {
               console.log("异常");
             }
           });
@@ -57,25 +94,25 @@ App({
         }
       }
     })
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo
 
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-            }
-          })
-        }
-      }
+  },
+  onShuJuTiJiaoChengGong:function(){
+    wx.showToast({
+      title: '成功',
+      icon: 'success',
+      duration: 1000
+    })
+  },
+  onShuJuTiJiaoShiBai: function () {
+    wx.showToast({
+      title: '失败',  //标题  
+      icon: 'loading',  //图标，支持"success"、"loading"  
+      //image: '../image/img.png',  //自定义图标的本地路径，image 的优先级高于 icon  
+      duration: 1000, //提示的延迟时间，单位毫秒，默认：1500  
+      mask: false,  //是否显示透明蒙层，防止触摸穿透，默认：false  
+      success: function () { }, //接口调用成功的回调函数  
+      fail: function () { },  //接口调用失败的回调函数  
+      complete: function () { } //接口调用结束的回调函数
     })
   },
   onShow: function (options) {

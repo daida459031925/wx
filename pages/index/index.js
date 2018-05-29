@@ -15,6 +15,9 @@ Page({
       url: '../logs/logs'
     })
   },
+  bindViewQianDao:function(){
+    app.onShuJuTiJiaoShiBai();
+  },
   onLoad: function () {
     console.log(app.globalData.userInfo)
     console.log(this.data.canIUse)
@@ -47,10 +50,14 @@ Page({
   },
   getUserInfo: function(e) {
     console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,//这个一段内容就是将数据保存到userinfo中去在对应的？？？？.wxml页面中就可以通过el表达式来获取userinfo的数据，这些数据会变成这样缓存在手机中。
-      hasUserInfo: true
-    })
+    var detaildata = e.detail;
+    if (detaildata.errMsg == "getUserInfo:ok"){
+     
+      app.globalData.userInfo = detaildata.userInfo
+      this.setData({
+        userInfo: e.detail.userInfo,//这个一段内容就是将数据保存到userinfo中去在对应的？？？？.wxml页面中就可以通过el表达式来获取userinfo的数据，这些数据会变成这样缓存在手机中。
+        hasUserInfo: true
+      })
+    }
   }
 })
