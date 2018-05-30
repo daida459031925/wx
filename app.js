@@ -1,12 +1,14 @@
 //app.js
 App({
   data:{
-    "http":"http://",
+    "http":"https://",
     "address":"127.0.0.1",
+    // "address": "外网127.0.0.1",
     "colon":":",
     "port":"8088",
     "fandAppid":"/we/reception/fandAppid.do",
-    "session": "/we/reception/session.do"
+    "session": "/we/reception/session.do",
+    "bindingWe":"/reception/bindingWe.do"
   },
   onLaunch: function (ress) {
     console.log("************")
@@ -39,62 +41,6 @@ App({
     //     }
     //   }
     // })
-
-    // 可以通过 wx.getSetting 先查询一下用户是否授权了 "scope.record" 这个 scope
-    wx.getSetting({
-      success(res) {
-        if (!res.authSetting['scope.userLocation']) {
-          wx.authorize({
-            scope: 'scope.userLocation',
-            success() {
-              // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
-              
-            }
-          })
-        }
-      }
-    })
-
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        //进入小程序后就会启动这个。目测是从本机得到的code
-        console.log(res.code + "*********************登陆这个小程序的时候就会生产一个code");
-        if (res.code) {
-          //发起网络请求
-          //这个网络请求时发到自己的服务器中的（第三方服务器），然后由第三方服务器来获取openid
-          //模拟第三方服务器已经获取到code然后进行访问来获取openid
-          wx.request({
-            url: this.data.http + this.data.address + this.data.colon + this.data.port + this.data.session,
-            data: {
-              js_code: res.code
-            },
-            header: {
-              'content-type': 'application/json' // 默认值
-            },
-            success: function (datas) {
-              console.log(datas.data);//微信规定的所有数据加载一个data
-              // console.log(datas.data.openid+"获取到的openid，这个openid应该是第三方服务器生产出来的，但是目前研究的是微信端，所以直接写在了微信小程序里  ");
-              var sudata = datas.data;
-              if (sudata.code == 200) {
-                console.log(sudata.data);
-                wx.setStorage({
-                  key: '3rd_session',
-                  data: sudata.data
-                });//将服务器的session放入缓存中
-              }
-            },
-            fail: function () {
-              console.log("异常");
-            }
-          });
-        } else {
-          console.log('获取用户登录态失败！' + res.errMsg)
-        }
-      }
-    })
-
   },
   onShuJuTiJiaoChengGong:function(){
     wx.showToast({

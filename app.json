@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/binding/binding",
     "pages/index/index",
     "pages/logs/logs",
     "pages/register/register"
