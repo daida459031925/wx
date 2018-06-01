@@ -40,7 +40,7 @@ Page({
     // console.log('手机号为: ', this.data.phone);
     // console.log('密码为: ', this.data.password);
     // console.log(e);
-    // console.log(e.detail.errMsg)
+    console.log(e.detail)
     // console.log(e.detail.userInfo)
     // console.log(e.detail.rawData)
     var phone = this.data.phone;
@@ -50,6 +50,7 @@ Page({
     }else{
       if (e.detail.errMsg == "getUserInfo:fail auth deny") {
         //拒绝获取并绑定的话就不进行登陆  
+        console.log("***********拒绝登陆");
       } else {
         this.data.nickName = e.detail.userInfo.nickName;
         var nickName = e.detail.userInfo.nickName;
@@ -97,11 +98,11 @@ Page({
                   var sudata = datas.data;
                   if (sudata.code == 200 && sudata.data != "") {
                     console.log(sudata.data);
-                    wx.setStorage({ key: "phone", data: phone });
+                    wx.setStorage({ key: "phone", data: sudata.data.phone });
                     //中间添加其他的数据保存
                     wx.setStorage({
                       key: '3rd_session',
-                      data: sudata.data,
+                      data: sudata.data.session_3rd,
                       success: function () {
                         wx.redirectTo({
                           url: '../index/index'
@@ -123,38 +124,21 @@ Page({
     }
     
   },
-
-  listenerLogin123:function(){
-    wx.getStorage({
-      //获取数据的key
-      key: 'session',
-      success: function (res) {
-        console.log(res)
-      },
-      /**
-       * 失败会调用
-       */
-      fail: function (res) {
-        console.log(res)
-      }
-    });
-  },
-
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
     
   },
   onReady: function () {
     // 页面渲染完成
-    console.log("AaAAAAAAAAAAAAAAAAAAAAAAA************");
     wx.login({
       success: res => {
+        console.log(res.code+"************************");
         if (res.code) {
           //发起网络请求
           //这个网络请求时发到自己的服务器中的（第三方服务器），然后由第三方服务器来获取openid
           //模拟第三方服务器已经获取到code然后进行访问来获取openid
           wx.request({
-            url: app.data.http + app.data.address + app.data.colon + app.data.port + app.data.bindingWe,
+            url: app.data.http + app.data.address + app.data.colon + app.data.port + app.data.session,
             data: {
               js_code: res.code
             },
@@ -162,14 +146,36 @@ Page({
               'content-type': 'application/json' // 默认值
             },
             success: function (datas) {
-              console.log(datas)
+              wx.setStorage({
+                key: 'phone',
+                data: datas.data.data.phone
+              })
+              wx.setStorage({
+                key: '3rd_session',
+                data: datas.data.data.session_3rd,
+                success:function(){
+                  wx.getStorage({
+                    key: 'phone',
+                    success: function(res) {
+                      if (res.data == null || res.data == "" || res.data.length != 11){
+                        //可以制作提示要求绑定
+                        console.log("没有输入电话证明没有绑定成功暂时没有办法验证电话的真实")
+                      }else{
+                        wx.redirectTo({
+                          url: '../index/index'
+                        })
+                      }
+                    },
+                  })
+                }
+              })
             },
             fail: function () {
-              console.log("异常");
+              console.log("3rd_session异常");
             }
           });
         } else {
-          console.log('获取用户登录态失败！' + res.errMsg)
+          console.log('加载完成时候获取用户登录态失败！' + res.errMsg)
         }
       }
     })

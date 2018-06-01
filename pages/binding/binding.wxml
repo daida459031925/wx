@@ -11,7 +11,3 @@
 <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="listenerLogin"
 style="margin-left: 15rpx; margin-right: 15rpx; margin-top: 50rpx; border-radius: 40rpx" type="primary" >绑定并获取用户信息</button>
 
-<button   bindtap="listenerLogin123"
->test</button>
-
-
