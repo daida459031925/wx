@@ -1,0 +1,17 @@
+<!--pages/binding/binding.wxml-->
+<!--style的优先级比class高会覆盖和class相同属性-->
+<view class="inputView" style="margin-top: 40% ">
+<input class="input" type="number" placeholder="请输入手机号" placeholder-style="color: red" bindinput="listenerPhoneInput" maxlength='11'/>
+</view>
+
+<view class="inputView">
+<input class="input" password="true" placeholder="验证码" placeholder-style="color: red" bindinput="listenerPasswordInput" maxlength='15'/>
+</view>
+
+<button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="listenerLogin"
+style="margin-left: 15rpx; margin-right: 15rpx; margin-top: 50rpx; border-radius: 40rpx" type="primary" >绑定并获取用户信息</button>
+
+<button   bindtap="listenerLogin123"
+>test</button>
+
+
