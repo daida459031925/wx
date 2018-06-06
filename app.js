@@ -2,13 +2,17 @@
 App({
   data:{
     "http":"https://",
-    "address":"127.0.0.1",
-    // "address": "外网127.0.0.1",
-    "colon":":",
-    "port":"8088",
+    // "address":"blog.daida.ltd",
+    // "colon": "",
+    // "port": "",
+    "address": "127.0.0.1",
+    "colon": ":",
+    "port": "8088",
     "fandAppid":"/we/reception/fandAppid.do",
     "session": "/we/reception/session.do",
-    "bindingWe":"/we/reception/bindingWe.do"
+    "bindingWe":"/we/reception/bindingWe.do",
+    "addUserCheckIn":"/we/CheckIn/addUserCheckIn.do",
+    "getUserCheckInAll":"/we/CheckIn/getUserCheckInAll.do"
   },
   onLaunch: function (ress) {
     console.log("************")
@@ -106,5 +110,26 @@ App({
     wx.redirectTo({
 
     })//不存在页面的路径
-  }
+  },
+  SuccessfulWindow: function (title) {
+    wx.showToast({
+      title: title,  //标题  
+      icon: 'success',  //图标，支持"success"、"loading"  
+      //image: '../image/img.png',  //自定义图标的本地路径，image 的优先级高于 icon  
+      duration: 1000, //提示的延迟时间，单位毫秒，默认：1500  
+      mask: false,  //是否显示透明蒙层，防止触摸穿透，默认：false  
+      success: function () { }, //接口调用成功的回调函数  
+      fail: function () { },  //接口调用失败的回调函数  
+      complete: function () { } //接口调用结束的回调函数
+    })
+  },
+  FailedCartridgeFrame: function (title) {
+    wx.showToast({
+      title: title,  //标题  
+      icon: 'loading',  //图标，支持"success"、"loading"  
+      //image: '../image/img.png',  //自定义图标的本地路径，image 的优先级高于 icon  
+      duration: 1000, //提示的延迟时间，单位毫秒，默认：1500  
+      mask: false,  //是否显示透明蒙层，防止触摸穿透，默认：false  
+    })
+  },
 })

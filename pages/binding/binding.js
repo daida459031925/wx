@@ -89,9 +89,8 @@ Page({
                   avatarUrl: avatarUrl,
                   phone: phone
                 },
-                header: {
-                  'content-type': 'application/json' // 默认值
-                },
+                header: { "Content-Type": "application/x-www-form-urlencoded" },
+                method: "post",
                 success: function (datas) {
                   console.log(datas.data);//微信规定的所有数据加载一个data
                   // console.log(datas.data.openid+"获取到的openid，这个openid应该是第三方服务器生产出来的，但是目前研究的是微信端，所以直接写在了微信小程序里  ");
@@ -142,9 +141,8 @@ Page({
             data: {
               js_code: res.code
             },
-            header: {
-              'content-type': 'application/json' // 默认值
-            },
+            header: { "Content-Type": "application/x-www-form-urlencoded" },
+            method: "post",
             success: function (datas) {
               wx.setStorage({
                 key: 'phone',

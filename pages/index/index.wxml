@@ -4,8 +4,25 @@
    <open-data class="userinfo-avatar" type="userAvatarUrl" background-size="cover" ></open-data>
       <!-- <open-data type="userGender" lang="zh_CN" class="userinfo-nickname"></open-data> -->
       <open-data type="userNickName" class="userinfo-nickname"></open-data>
+      <view class='userinfo-view'>{{wea.temperature.data}}℃</view>
+      <view class='userinfo-weather'>{{wea.weather.data}} {{wea.winddirection.data}} {{wea.windpower.data}}</view>
   </view>
+  <view bindtap="mapViewTap" class='userinfo-mapViewTap'>📍</view>
     <view class="vies-qiandao" bindtap="bindViewQianDao">签到</view>
+    <view class="table">
+      <view class="tr bg-w">
+        <view class="th">数据库id</view>
+        <view class="th">地点</view>
+        <view class="th ">签到时间</view>
+      </view>
+      <block wx:for="{{listData}}" wx:key="{{id}}">
+        <view class="tr bg-g">
+          <view class="td">{{item.id}}</view>
+          <view class="td">{{item.detailed_information}}</view>
+          <view class="td">{{item.add_time}}</view>
+        </view>
+      </block>
+    </view>
   <view class="section-input">
     <view class="section-input-width">首页</view>
     <view class="section-input-width">附近</view>
@@ -13,15 +30,6 @@
     <view class="section-input-width">我的</view>
   </view>
 </view>
-
-<view class='content'>
-  <view class='today'>
-    <view class='info'>
-      <view class='temp'>{{weather.temperature.data}}℃</view>
-      <view class='weather'>{{weather.weather.data}} {{weather.winddirection.data}} {{weather.windpower.data}}</view>
-      <view>友情提示：今天天气不错，是风和日丽的，适合出去玩</view>
-      <view class='city'>{{weather.city.data}}</view>
-    </view>
-  </view>
+<view>
+<view class=''></view>
 </view>
-<button bindtap="mapViewTap" style="margin:10px">查看地图</button>
